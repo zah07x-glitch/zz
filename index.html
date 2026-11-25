@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>عالم جدول الضرب التفاعلي</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--g:#07A869;--b:#3D7EB9;--t:#0DA9A6;--n:#15445A;--go:#C1B489;--gr:#C2C1C1;--bg:#eef6f4;--cd:#fff;--tx:#15445A}
+[data-theme=dark]{--bg:#0e2530;--cd:#17394a;--tx:#eaf3f1}
+*{box-sizing:border-box}html{font-size:100%}
+body{margin:0;font-family:Tajawal,Tahoma,Arial,sans-serif;background:var(--bg);color:var(--tx);line-height:1.6;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--n);color:#fff;position:sticky;top:0;z-index:5}
+header b{font-size:1.05rem}header button{background:none;border:0;color:#fff;font-size:1.4rem;cursor:pointer;padding:4px 8px}
+main{max-width:860px;margin:0 auto;padding:14px}
+footer{text-align:center;padding:18px;color:var(--tx);font-weight:700;border-top:3px solid var(--go);margin-top:20px}
+.card{background:var(--cd);border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 2px 10px #0001}
+.hero{background:linear-gradient(135deg,var(--g),var(--t) 60%,var(--b));color:#fff;border-radius:24px;padding:22px;text-align:center}
+.hero h1{margin:6px 0;font-size:1.9rem;font-weight:800}.hero p{margin:6px 0}
+.tiles{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:10px 0}
+.tiles span{background:#fff;color:var(--n);border-radius:14px;padding:6px 12px;font-size:1.5rem;font-weight:800;direction:rtl}
+.b{font-family:inherit;font-size:1.1rem;font-weight:700;border:0;border-radius:14px;padding:13px 16px;background:var(--b);color:#fff;cursor:pointer;min-height:48px;margin:4px;transition:transform .15s}
+.b:hover{transform:scale(1.03)}.b:focus-visible,input:focus-visible,select:focus-visible{outline:4px solid var(--go)}
+.b:disabled{opacity:.35}.b.g{background:var(--g)}.b.t{background:var(--t)}.b.n{background:var(--n)}.b.w{background:#fff;color:var(--n)}.b.no{background:#c0504d}
+.row{display:flex;flex-wrap:wrap;justify-content:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tc{border:0;border-radius:18px;color:#fff;font-family:inherit;font-size:1.6rem;font-weight:800;padding:18px 8px;cursor:pointer;min-height:90px}
+.tc small{display:block;font-size:.85rem;font-weight:400}
+.bar{height:16px;background:var(--gr);border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:var(--g);transition:width .5s}
+.q{font-size:2.6rem;font-weight:800;text-align:center;margin:14px 0;direction:rtl}
+.fr{background:var(--cd);border:2px solid var(--t);border-radius:16px;padding:10px 14px;margin:10px 0}
+.rows div{display:flex;justify-content:space-between;padding:10px 14px;border-radius:12px;font-size:1.4rem;font-weight:700;cursor:pointer;direction:rtl}
+.rows div.s{background:var(--g);color:#fff}
+.grp{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}.grp span{border:2px dashed var(--t);border-radius:12px;padding:4px 8px;font-size:1.1rem}
+.sky{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;min-height:190px}
+.bl{width:84px;height:104px;border-radius:50% 50% 48% 48%;border:0;color:#fff;font:800 1.5rem Tajawal,sans-serif;cursor:pointer;animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-14px)}}
+.cd{height:74px;font-size:1.25rem;border-radius:12px;border:0;background:var(--b);color:#fff;font-family:inherit;font-weight:800;cursor:pointer}
+.cd.f{background:#fff;color:var(--n);border:2px solid var(--t)}.cd.d{background:var(--g);color:#fff}
+.bdg{opacity:.35;text-align:center}.bdg.on{opacity:1}.bdg i{font-size:2rem;font-style:normal;display:block}
+input,select{font:inherit;padding:10px;border-radius:10px;border:2px solid var(--gr);background:var(--cd);color:var(--tx);margin:4px}
+.cf{position:fixed;top:-10px;width:10px;height:14px;animation:fall 1.8s ease-in forwards;z-index:9}
+@keyframes fall{to{transform:translateY(105vh) rotate(540deg)}}
+#ts{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--n);color:#fff;padding:12px 20px;border-radius:14px;z-index:9;display:none;font-weight:700}
+.nomo *{animation:none!important;transition:none!important}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+canvas{max-width:100%;border:3px solid var(--go);border-radius:8px}
+</style>
+</head>
+<body>
+<header><button onclick="go('home')" aria-label="الرئيسية">🏠</button><b>عالم جدول الضرب التفاعلي</b><span><button onclick="go('about')" aria-label="عن التطبيق">ℹ️</button><button onclick="go('set')" aria-label="الإعدادات">⚙️</button></span></header>
+<main id="app"></main>
+<footer>إعداد الطالب : راكان عبدالله الزهراني<br>تحت إشراف المعلم : محمد مسملي</footer>
+<div id="ts"></div>
+<script>
+const CR='إعداد الطالب : راكان عبدالله الزهراني',SUP='تحت إشراف المعلم : محمد مسملي',COL=['#07A869','#3D7EB9','#0DA9A6','#15445A','#8a7d4a','#5b6b73'];
+const $=s=>document.querySelector(s),A=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]),rnd=n=>Math.floor(Math.random()*n),shuf=a=>a.sort(()=>Math.random()-.5);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const def={name:'',av:'🦁',pts:0,m:{},seen:[],badges:[],hist:[],last:null,race:0,o:{snd:1,dark:0,fs:100,mo:1}};
+let S;try{S={...structuredClone(def),...JSON.parse(localStorage.getItem('mt')||'{}')};S.o={...def.o,...S.o}}catch(e){S=structuredClone(def)}
+const save=()=>{try{localStorage.setItem('mt',JSON.stringify(S))}catch(e){}};
+function opt(){document.documentElement.dataset.theme=S.o.dark?'dark':'';document.documentElement.style.fontSize=S.o.fs+'%';document.body.classList.toggle('nomo',!S.o.mo)}
+let ac;function tone(f,d=.15){if(!S.o.snd)return;try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=f;g.gain.value=.08;o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+d)}catch(e){}}
+function say(t){if(!window.speechSynthesis)return toast('الصوت غير مدعوم في هذا المتصفح');try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='ar-SA';speechSynthesis.speak(u)}catch(e){}}
+function toast(t){const e=$('#ts');e.textContent=t;e.style.display='block';clearTimeout(e.h);e.h=setTimeout(()=>e.style.display='none',2600)}
+function confetti(){if(!S.o.mo)return;for(let i=0;i<28;i++){const s=document.createElement('i');s.className='cf';s.style.cssText=`left:${rnd(100)}%;background:${COL[rnd(6)]};animation-delay:${Math.random()*.4}s`;document.body.append(s);setTimeout(()=>s.remove(),2300)}}
+const gm=(a,b)=>S.m[a+'x'+b]||{ok:0,bad:0},opOk=(a,b)=>{const m=gm(a,b);return m.ok>=2&&m.ok>m.bad};
+const tM=a=>[...Array(12)].every((_,i)=>opOk(a,i+1)),nM=()=>[...Array(12)].filter((_,i)=>tM(i+1)).length;
+function rec(a,b,ok){const m=S.m[a+'x'+b]=S.m[a+'x'+b]||{ok:0,bad:0};ok?m.ok++:m.bad++}
+const acc=()=>{let o=0,t=0;for(const k in S.m){o+=S.m[k].ok;t+=S.m[k].ok+S.m[k].bad}return t?Math.round(o/t*100):0};
+const weak=()=>Object.entries(S.m).filter(([k,v])=>v.bad>v.ok).sort((x,y)=>(y[1].bad-y[1].ok)-(x[1].bad-x[1].ok)).map(([k])=>k.split('x').map(Number));
+const BD=[['بطل البداية','🌱','أول إجابة صحيحة',()=>S.pts>0],['مستكشف الأرقام','🧭','فتح ٦ جداول للتعلم',()=>S.seen.length>=6],['نجم جدول الضرب','⭐','إتقان جدول واحد',()=>nM()>=1],['عبقري الرياضيات','🧠','إتقان ٦ جداول',()=>nM()>=6],['بطل التحدي','🏆','١٥ إجابة صحيحة في سباق ٦٠ ثانية',()=>S.race>=15],['ملك جدول الضرب','👑','إتقان الجداول ١٢',()=>nM()>=12]];
+function chk(){BD.forEach(([n,i,,f])=>{if(!S.badges.includes(n)&&f()){S.badges.push(n);toast(i+' وسام جديد: '+n);confetti()}});save()}
+const lvl=()=>Math.floor(S.pts/100)+1,stars=()=>Math.floor(S.pts/50);
+const R=h=>$('#app').innerHTML=h,btn=(t,f,c='')=>`<button class="b ${c}" onclick="${f}">${t}</button>`;
+let tm=0,P=null,T=null,M=null;
+function go(v,x){clearInterval(tm);scrollTo(0,0);V[v](x)}
+const sel=(id,arr)=>`<select id="${id}">${arr}</select>`,tOpts=a=>[...Array(12)].map((_,i)=>`<option value="${i+1}">${a}${A(i+1)}</option>`).join('');
+const V={
+home(){const w=weak()[0],n=nM();R(`<section class="hero"><div class="tiles"><span>٣ × ٤ = ١٢</span><span>٧ × ٨ = ٥٦</span><span>٩ × ٦ = ٥٤</span></div><h1>عالم جدول الضرب التفاعلي</h1><p><b>تعلّم واضرب والعب وتفوّق</b></p><p>معًا نتعلم جدول الضرب بطريقة ممتعة!</p><p>مرحبًا بك أيها البطل الصغير${S.name?' '+esc(S.name):''}، هيا نبدأ رحلة الأرقام ونكتشف متعة الضرب!</p><p><b>${CR}<br>${SUP}</b></p></section>
+<div class="card"><div class="row"><b>⭐ ${A(stars())} نجمة</b>&nbsp;&nbsp;<b>🎯 ${A(S.pts)} نقطة</b>&nbsp;&nbsp;<b>المستوى ${A(lvl())}</b></div><p>أتقنتَ ${A(n)} من ١٢ جدولًا</p><div class="bar"><i style="width:${n/12*100}%"></i></div><div class="fr">🤖 <b>صديق الأرقام:</b> ${w?`أقترح أن تراجع ${A(w[0])} × ${A(w[1])} اليوم.`:'ابدأ بأي جدول وسأرافقك خطوة بخطوة!'}</div></div>
+<div class="row">${btn('📖 ابدأ التعلم',"go('learn')",'g')}${btn('⚡ تحدي جدول الضرب',"g('race')",'t')}${btn('🎮 الألعاب التعليمية',"go('games')")}${btn('📝 اختبر معلوماتك',"go('quiz')",'n')}${btn('🏅 إنجازاتي',"go('ach')",'g')}${btn('🧠 مراجعة ذكية',"smart()",'t')}</div>`)},
+learn(){R(`<h2>اختر الجدول</h2><div class="grid">${[...Array(12)].map((_,i)=>`<button class="tc" style="background:${COL[i%6]}" onclick="go('tbl',${i+1})">${A(i+1)}<small>${tM(i+1)?'✅ متقن':S.seen.includes(i+1)?'قيد التعلم':'جديد'}</small></button>`).join('')}</div>`)},
+tbl(a){if(!T||T.a!==a)T={a,s:1,hide:0,rev:[]};if(!S.seen.includes(a)){S.seen.push(a);chk()}S.last=['tbl',a];save();const b=T.s;
+R(`<h2>جدول ضرب العدد ${A(a)}</h2><div class="card rows">${[...Array(12)].map((_,i)=>{const x=i+1,h=T.hide&&!T.rev.includes(x);return`<div class="${x===b?'s':''}" onclick="T.s=${x};T.rev.push(${x});go('tbl',${a})"><span>${A(a)} × ${A(x)} = ${h?'؟':A(a*x)}</span><span onclick="event.stopPropagation();say('${a} ضرب ${x} يساوي ${a*x}')">🔊</span></div>`}).join('')}</div>
+<div class="card"><b>${A(a)} × ${A(b)}</b> تعني: نجمع ${A(a)} ${A(b)} مرات<br>${Array(b).fill(A(a)).join(' + ')} = <b>${A(a*b)}</b><div class="grp">${Array(b).fill(`<span>${'⭐'.repeat(a)}</span>`).join('')}</div></div>
+<div class="row">${btn('التالي ◀',`T.s=T.s%12+1;go('tbl',${a})`,'g')}${btn('🔊 استمع',`say('${a} ضرب ${b} يساوي ${a*b}')`,'t')}${btn(T.hide?'👁️ أظهر النتائج':'🙈 أخفِ النتائج',`T.hide=!T.hide;T.rev=[];go('tbl',${a})`,'w')}${btn('تدرب الآن',`play({mode:'choose',kind:'game',title:'تدريب جدول ${a}',n:10,tabs:[${a}],smart:1})`)}${btn('اختبر نفسك',`play({mode:'choose',kind:'quiz',title:'اختبار جدول ${a}',n:10,tabs:[${a}]})`,'n')}</div>`)},
+games(){const L=[['choose','اختر الإجابة الصحيحة','🎯'],['race','سباق جدول الضرب','⏱️'],['missing','أكمل العدد الناقص','🧩'],['mem','الذاكرة الرياضية','🃏'],['tf','صح أم خطأ؟','✅'],['balloon','البالونات الحسابية','🎈']];
+R(`<h2>الألعاب التعليمية</h2><p>الجدول: ${sel('gt','<option value="">كل الجداول</option>'+tOpts('جدول '))}</p><div class="grid">${L.map((l,i)=>`<button class="tc" style="background:${COL[i]}" onclick="g('${l[0]}')">${l[2]}<small>${l[1]}</small></button>`).join('')}</div>`)},
+quiz(){R(`<h2>اختبر معلوماتك</h2><div class="card"><p>المستوى: ${sel('lv','<option value="e">سهل (١–٤)</option><option value="m">متوسط (٥–٨)</option><option value="h">متقدم (٩–١٢ مع تنويع)</option><option value="a">كل الجداول</option>')}</p><p>جدول معين: ${sel('tb','<option value="">بدون</option>'+tOpts('جدول '))}</p><p>عدد الأسئلة: ${sel('nn','<option>10</option><option>20</option><option>30</option>')}</p><label><input type="checkbox" id="tt"> اختبار بمؤقت</label><div class="row">${btn('ابدأ الاختبار','qz()','g')}</div></div>`)},
+ach(){const wk=weak().slice(0,5);R(`<h2>إنجازاتي</h2><div class="card"><input id="nm" maxlength="20" placeholder="اكتب اسمك" value="${esc(S.name)}" oninput="S.name=this.value.trim();save()"><div>${['🦁','🐼','🦊','🐯','🦄','🤖'].map(e=>`<button class="b ${S.av===e?'g':'w'}" onclick="S.av='${e}';save();go('ach')">${e}</button>`).join('')}</div><h3>${S.av} ${esc(S.name)||'بطل صغير'}</h3><p>🎯 ${A(S.pts)} نقطة · ⭐ ${A(stars())} · المستوى ${A(lvl())}</p></div>
+<div class="card"><h3>الجداول</h3><div class="grp">${[...Array(12)].map((_,i)=>`<span>${A(i+1)} ${tM(i+1)?'✅':'🔸'}</span>`).join('')}</div><p><b>تحتاج تدريبًا:</b> ${wk.length?wk.map(w=>A(w[0])+'×'+A(w[1])).join('، '):'لا توجد عمليات بعد'}</p></div>
+<div class="card"><h3>الأوسمة</h3><div class="grid">${BD.map(b=>`<div class="bdg ${S.badges.includes(b[0])?'on':''}"><i>${b[1]}</i><b>${b[0]}</b><small>${b[2]}</small></div>`).join('')}</div></div>
+<div class="card"><h3>آخر النتائج</h3>${S.hist.length?S.hist.map(h=>`<div>${h.d} — ${esc(h.k)}: ${A(h.p)}٪ (${A(h.ok)} صح / ${A(h.bad)} خطأ)</div>`).join(''):'لا توجد نتائج بعد. ابدأ اختبارًا!'}</div>
+<div class="row">${S.last?btn('▶ استكمل من آخر نشاط',`go('${S.last[0]}',${S.last[1]})`,'g'):''}${btn('🎓 الشهادة',"go('cert')",'n')}</div>`)},
+cert(){const n=nM();if(n<12)return R(`<h2>الشهادة</h2><div class="card">أتقنتَ ${A(n)} من ١٢ جدولًا. أتقن جميع الجداول لتحصل على شهادتك!<div class="bar"><i style="width:${n/12*100}%"></i></div></div>${btn('تدرب الآن','go(\'learn\')','g')}`);
+if(!S.name)return R(`<div class="card">اكتب اسمك أولًا في صفحة إنجازاتي لتظهر في الشهادة.</div>${btn('إنجازاتي',"go('ach')",'g')}`);
+R(`<h2>🎓 شهادتك جاهزة</h2><canvas id="cv" width="1200" height="850"></canvas><div class="row">${btn('⬇ تحميل PNG','dl()','g')}${btn('🖨 طباعة / حفظ PDF','pr()','n')}</div>`);document.fonts.ready.then(draw)},
+set(){R(`<h2>الإعدادات</h2><div class="card"><label><input type="checkbox" ${S.o.snd?'checked':''} onchange="S.o.snd=+this.checked;save()"> الأصوات</label><br><label><input type="checkbox" ${S.o.dark?'checked':''} onchange="S.o.dark=+this.checked;save();opt()"> الوضع الليلي</label><br><label><input type="checkbox" ${S.o.mo?'checked':''} onchange="S.o.mo=+this.checked;save();opt()"> المؤثرات الحركية</label><br><label>حجم الخط <input type="range" min="85" max="140" value="${S.o.fs}" oninput="S.o.fs=+this.value;save();opt()"></label><div class="row">${btn('🗑 إعادة تعيين التقدم','rs()','no')}</div></div>`)},
+about(){R(`<h2>عن التطبيق</h2><div class="card"><p>عالم جدول الضرب التفاعلي مشروع تعليمي يهدف إلى مساعدة طلاب وطالبات المرحلة الابتدائية على تعلم جداول الضرب وإتقانها من خلال الأنشطة والألعاب والتحديات التفاعلية، بما يجعل تعلم الرياضيات تجربة ممتعة ومحفزة.</p><p><b>${CR}<br>${SUP}</b></p></div>`)}};
+function rs(){if(confirm('هل أنت متأكد من حذف كل التقدم؟')){S=structuredClone(def);save();opt();go('home')}}
+function opts(a,b){const c=a*b,s=new Set([c]);for(const x of shuf([a*(b+1),a*(b-1),(a+1)*b,(a-1)*b,c+1,c-1,c+10,c-10,c+2])){if(s.size>=4)break;if(x>0)s.add(x)}let k=3;while(s.size<4)s.add(c+k++);return shuf([...s])}
+function pick(){const pool=[];P.tabs.forEach(a=>{for(let b=1;b<=12;b++){const m=gm(a,b);pool.push([a,b,P.smart?Math.max(.2,(m.ok+m.bad?1:1.5)+m.bad*3-Math.min(m.ok,5)*.15):1]);}});let r;for(let k=0;k<12;k++){let t=pool.reduce((s,x)=>s+x[2],0)*Math.random();r=pool[0];for(const p of pool){t-=p[2];if(t<=0){r=p;break}}if(!P.rc.includes(r[0]+'x'+r[1]))break}P.rc=[...P.rc.slice(-6),r[0]+'x'+r[1]];return r}
+function g(m){const v=($('#gt')||{}).value,tabs=v?[+v]:[1,2,3,4,5,6,7,8,9,10,11,12];S.last=['games'];if(m==='mem')return mem(tabs);if(m==='race')return play({mode:'choose',kind:'race',title:'سباق جدول الضرب',n:999,tabs,timer:60});play({mode:m,kind:'game',title:{choose:'اختر الإجابة',missing:'أكمل العدد الناقص',tf:'صح أم خطأ',balloon:'البالونات'}[m],n:10,tabs})}
+const LV={e:[1,2,3,4],m:[5,6,7,8],h:[9,10,11,12,9,10,11,12,1,2,3,4,5,6,7,8],a:[1,2,3,4,5,6,7,8,9,10,11,12]};
+function qz(){const tb=$('#tb').value,n=+$('#nn').value;play({mode:'choose',kind:'quiz',title:tb?'اختبار جدول '+tb:'اختبار',n,tabs:tb?[+tb]:LV[$('#lv').value],timer:$('#tt').checked?n*12:0})}
+const smart=()=>play({mode:'choose',kind:'game',title:'مراجعة ذكية',n:10,tabs:LV.a,smart:1});
+function play(c){clearInterval(tm);P={...c,i:0,ok:0,bad:0,wr:[],t0:Date.now(),rc:[],tl:c.timer||0};if(P.tl)tm=setInterval(()=>{P.tl--;const e=$('#tl');if(e)e.textContent=A(P.tl);if(P.tl<=0)fin()},1000);nq()}
+const fr=t=>{const e=$('#fr');if(e)e.innerHTML='🤖 <b>صديق الأرقام:</b> '+t},PR=['أحسنت يا بطل! 🌟','إجابة رائعة! 👏','أنت تتقدم! 🚀','ممتاز، استمر! ⭐'];
+const expl=q=>`لا بأس! ${A(q.a)} × ${A(q.b)} تعني: ${Array(q.b).fill(A(q.a)).join(' + ')} = ${A(q.c)}`;
+function nq(){if(P.i>=P.n)return fin();const[a,b]=pick(),q=P.q={a,b,c:a*b,tr:0},m=P.mode;let body;
+if(m==='missing'){q.t=b;const bs=[b];while(bs.length<4){const x=1+rnd(12);if(!bs.includes(x))bs.push(x)}body=`<div class="q">${A(a)} × ؟ = ${A(q.c)}</div><div class="g2">${shuf(bs).map(x=>btn(A(x),`ans(${x},this)`)).join('')}</div>`}
+else if(m==='tf'){q.tv=Math.random()<.5;const sh=q.tv?q.c:opts(a,b).find(x=>x!==q.c);body=`<div class="q">${A(a)} × ${A(b)} = ${A(sh)}</div><div class="g2">${btn('✅ صح','ans(1,this)','g')}${btn('❌ خطأ','ans(0,this)','no')}</div>`}
+else{q.t=q.c;const os=opts(a,b);body=m==='balloon'?`<div class="q">${A(a)} × ${A(b)} = ؟</div><div class="sky">${os.map((x,i)=>`<button class="bl" style="background:${COL[i]};animation-delay:${i*.4}s" onclick="ans(${x},this)">${A(x)}</button>`).join('')}</div>`:`<div class="q">${A(a)} × ${A(b)} = ؟</div><div class="g2">${os.map(x=>btn(A(x),`ans(${x},this)`)).join('')}</div>`}
+R(`<div class="card"><div class="row"><b>${P.title}</b>&nbsp;·&nbsp;${P.kind==='race'?`⏱ <b id="tl">${A(P.tl)}</b> ✅ ${A(P.ok)} ❌ ${A(P.bad)}`:`السؤال ${A(P.i+1)} من ${A(P.n)}${P.tl&&P.kind!=='race'?` · ⏱ <b id="tl">${A(P.tl)}</b>`:''}`}</div>${body}<div class="fr" id="fr">🤖 <b>صديق الأرقام:</b> ركّز وأنت قادر!</div></div>`)}
+function ans(v,el){const q=P.q;if(q.lock)return;const m=P.mode,ok=m==='tf'?!!v===q.tv:v===q.t;rec(q.a,q.b,ok);
+if(ok){q.lock=1;P.ok++;S.pts+=10;tone(880);tone(1175,.2);if(P.kind!=='race'){fr(PR[rnd(4)]+' +١٠ نقاط');if(P.kind==='game')confetti()}P.i++;chk();setTimeout(nq,P.kind==='quiz'?150:P.kind==='race'?250:900)}
+else{tone(220,.25);q.tr++;if(P.kind==='game'&&q.tr<2&&m!=='tf'){fr('حاول مرة أخرى، أنت تستطيع! 💪');el.disabled=true;return}q.lock=1;P.bad++;P.wr.push(q.a+'x'+q.b);if(P.kind==='game')fr(expl(q));P.i++;save();setTimeout(nq,P.kind==='game'?2800:250)}}
+function fin(){if(P.done)return;P.done=1;clearInterval(tm);const t=Math.round((Date.now()-P.t0)/1000),tot=P.ok+P.bad,p=tot?Math.round(P.ok/tot*100):0;if(P.kind==='race')S.race=Math.max(S.race,P.ok);S.hist.unshift({k:P.title,p,ok:P.ok,bad:P.bad,d:new Date().toLocaleDateString('ar-SA')});S.hist=S.hist.slice(0,8);chk();if(p>=80)confetti();
+const lv=p>=90?'متقن 🌟':p>=75?'جيد جدًا 👍':p>=50?'جيد 🙂':'يحتاج إلى تدريب 💪',msg=p>=90?'أحسنت يا بطل! أداء مذهل!':p>=50?'أنت تتقدم، قليل من التدريب وتصل للقمة!':'لا بأس، المحاولة طريق الإتقان. سنراجع معًا!',rv=[...new Set(P.wr)].map(k=>{const[a,b]=k.split('x');return A(a)+' × '+A(b)});
+R(`<div class="card"><h2>🎉 النتيجة</h2><p>✅ صحيحة: <b>${A(P.ok)}</b> · ❌ خاطئة: <b>${A(P.bad)}</b> · النسبة: <b>${A(p)}٪</b></p><p>⏱ الزمن: ${A(t)} ثانية · مستوى الإتقان: <b>${lv}</b></p><p><b>للمراجعة:</b> ${rv.length?rv.join('، '):'لا شيء، رائع!'}</p><div class="fr">🤖 ${msg}</div><div class="row">${btn('🔁 أعد المحاولة','play(P)','g')}${btn('🏠 الرئيسية',"go('home')")}</div></div>`)}
+function mem(tabs){const ops=[],us=new Set;for(const[a,b]of shuf(tabs.flatMap(a=>[...Array(12)].map((_,i)=>[a,i+1])))){if(ops.length>=6)break;if(!us.has(a*b)){us.add(a*b);ops.push([a,b])}}const cs=[];ops.forEach((o,i)=>{cs.push({id:i,t:A(o[0])+' × '+A(o[1])});cs.push({id:i,t:A(o[0]*o[1])})});M={cs:shuf(cs),op:ops,o:[],d:0,mv:0,lk:0};dm()}
+function dm(){R(`<div class="card"><h2>🃏 الذاكرة الرياضية</h2><p>الحركات: ${A(M.mv)} · المطابقات: ${A(M.d)} من ٦</p><div class="grid" style="grid-template-columns:repeat(3,1fr)">${M.cs.map((c,i)=>`<button class="cd ${c.d?'d':c.f?'f':''}" onclick="fl(${i})">${c.f||c.d?c.t:'❓'}</button>`).join('')}</div>${M.d===6?`<div class="fr">🎉 أحسنت! أنهيتَ اللعبة في ${A(M.mv)} حركة. ${btn('العب مجددًا',"go('games')",'g')}</div>`:''}</div>`)}
+function fl(i){const c=M.cs[i];if(M.lk||c.f||c.d)return;c.f=1;M.o.push(i);tone(600,.08);if(M.o.length<2)return dm();M.mv++;const[x,y]=M.o.map(k=>M.cs[k]);if(x.id===y.id){x.d=y.d=1;M.d++;M.o=[];const o=M.op[x.id];rec(o[0],o[1],true);S.pts+=5;tone(1000,.2);if(M.d===6){S.pts+=30;confetti()}chk();dm()}else{M.lk=1;dm();setTimeout(()=>{x.f=y.f=0;M.o=[];M.lk=0;dm()},800)}}
+function draw(){const c=$('#cv');if(!c)return;const x=c.getContext('2d'),F='Tajawal,Tahoma,Arial,sans-serif';x.direction='rtl';x.textAlign='center';x.fillStyle='#fff';x.fillRect(0,0,1200,850);x.strokeStyle='#07A869';x.lineWidth=14;x.strokeRect(30,30,1140,790);x.strokeStyle='#C1B489';x.lineWidth=5;x.strokeRect(55,55,1090,740);
+const T=(s,y,sz,col='#15445A',w=700)=>{x.fillStyle=col;x.font=`${w} ${sz}px ${F}`;x.fillText(s,600,y)};
+T('شهادة تميز وإتقان',170,76,'#07A869',800);T('تُمنح للطالب / الطالبة:',270,40);T(S.name,380,84,'#3D7EB9',800);T('تقديرًا لتميزه وإتقانه جداول الضرب من ١ إلى ١٢.',470,38);T('نسبة الإتقان: '+A(acc())+'٪',560,38);T('تاريخ الإنجاز: '+new Date().toLocaleDateString('ar-SA'),620,34);T('🏅 وسام التميز: ملك جدول الضرب 👑',690,36,'#8a7d4a');T(CR,742,30);T(SUP,782,30)}
+function dl(){const a=document.createElement('a');a.href=$('#cv').toDataURL('image/png');a.download='شهادة-جدول-الضرب.png';a.click()}
+function pr(){const w=open('');if(!w)return toast('اسمح بالنوافذ المنبثقة للطباعة');w.document.write(`<img src="${$('#cv').toDataURL()}" style="width:100%" onload="print()">`);w.document.close()}
+opt();go('home');
+</script>
+</body>
+</html>
